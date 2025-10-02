@@ -1,0 +1,25 @@
+{
+  "name": "company-cards-manager",
+  "version": "1.0.0",
+  "description": "A visual company cards manager with social media links",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step needed for static files'",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "keywords": [
+    "company",
+    "cards",
+    "social-media",
+    "management"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

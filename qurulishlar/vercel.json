@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/companies.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/companies",
+      "destination": "/api/companies.js"
+    }
+  ]
+}

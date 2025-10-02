@@ -1,0 +1,20 @@
+{
+  "companies": [
+    {
+      "id": "demo_1",
+      "name": "Tech Solutions Inc.",
+      "telegram": "https://t.me/techsolutions",
+      "instagram": "https://instagram.com/techsolutions",
+      "website": "https://techsolutions.com",
+      "createdAt": "2025-10-02T00:00:00.000Z"
+    },
+    {
+      "id": "demo_2",
+      "name": "Creative Agency",
+      "telegram": "",
+      "instagram": "https://instagram.com/creativeagency",
+      "website": "https://creativeagency.com",
+      "createdAt": "2025-10-02T00:00:00.000Z"
+    }
+  ]
+}
