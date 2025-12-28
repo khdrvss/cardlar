@@ -1,106 +1,69 @@
-# 🚀 Company Cards Manager - Live Deployment Guide
+# 🚀 Cardlar Collaboration Hub - Deployment Guide
 
-## ✅ **YES! You CAN edit/add/delete companies live after deployment!**
+This project now ships with a **React front-end** (static) and a **Django REST API** backend. Use Vercel for the UI and Render/Railway for the API.
 
-I've updated your application to use a **serverless API backend** that will work perfectly with Vercel, Netlify, or similar platforms.
-
-## 📁 Updated File Structure
+## 📁 Updated Structure
 ```
 qurulishlar/
-├── index.html          # Main frontend
-├── styles.css          # Styling
-├── script.js           # Updated with API calls
-├── package.json        # Dependencies
-├── vercel.json         # Vercel configuration
-└── api/
-    ├── companies.json  # Database file
-    └── companies.js    # API endpoints
+├── index.html          # React (CDN) entrypoint
+├── styles.css          # UI styling
+├── script.js           # React app logic
+├── backend/            # Django API
+│   ├── manage.py
+│   ├── requirements.txt
+│   ├── cardlar/
+│   └── core/
+└── vercel.json         # Vercel configuration
 ```
 
-## 🌐 Deployment Options
+## ✅ Frontend: Vercel
+1. Push the repo to GitHub.
+2. Import the repository on Vercel.
+3. Vercel will deploy the static site automatically.
+4. Update `API_BASE_URL` on the frontend to point at your Django API if needed.
+   - Example: add a small inline script before `script.js`:
+     ```html
+     <script>window.API_BASE_URL = "https://your-api.onrender.com/api";</script>
+     ```
 
-### Option 1: **Vercel (Recommended)**
-1. Install Vercel CLI: `npm i -g vercel`
-2. In your project folder: `vercel`
-3. Follow the prompts
-4. Your live app will be available at: `https://yourproject.vercel.app`
-
-### Option 2: **Netlify**
-1. Drag & drop your folder to netlify.com
-2. Enable Netlify Functions for the API
-3. Update the API URL in script.js to use Netlify functions
-
-### Option 3: **GitHub Pages + External API**
-Deploy frontend to GitHub Pages and use a service like:
-- Railway.app
-- Render.com
-- Heroku
-
-## 🔧 What Changed
-
-### ✅ **Live Data Sync**
-- All changes now save to a server file (`companies.json`)
-- Multiple users can add/edit/delete companies
-- Changes are visible to everyone immediately
-- Data persists between sessions
-
-### ✅ **Fallback Protection**
-- If the API fails, app falls back to localStorage
-- Graceful error handling with user notifications
-- Works offline with local data
-
-### ✅ **API Endpoints**
-- `GET /api/companies` - Load all companies
-- `POST /api/companies` - Add new company
-- `PUT /api/companies?id=xxx` - Update company
-- `DELETE /api/companies?id=xxx` - Delete company
-
-## 🚀 Quick Deploy Steps
-
-1. **Push to GitHub**:
+## ✅ Backend: Render or Railway
+1. Create a new web service from your repo.
+2. Set the root to `backend/`.
+3. Build command:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin YOUR_REPO_URL
-   git push -u origin main
+   pip install -r requirements.txt
+   python manage.py migrate
    ```
+4. Start command:
+   ```bash
+   gunicorn cardlar.wsgi
+   ```
+5. Add environment variables:
+   - `DJANGO_SECRET_KEY`
+   - `DJANGO_DEBUG=false`
+   - `DJANGO_ALLOWED_HOSTS=your-api.onrender.com`
+   - `DATABASE_URL=postgres://...` (provided by Render/Railway)
 
-2. **Deploy to Vercel**:
-   - Go to vercel.com
-   - Import your GitHub repository
-   - Deploy automatically!
+## ✅ Database: PostgreSQL
+Render/Railway provide a managed PostgreSQL database. Paste the `DATABASE_URL` into your backend environment variables.
 
-3. **Access Live App**:
-   - Your app will be live at `https://yourproject.vercel.app`
-   - Anyone can visit and manage companies
-   - All changes are saved permanently
+## 🔐 Auth & Protected Routes
+- JWT login: `POST /api/auth/token/`
+- JWT signup: `POST /api/auth/signup/`
+- Protected endpoints: `POST /api/projects/`, `POST /api/applications/`
 
-## 🔐 Security Notes
+## 🧪 Local Development
+```bash
+# Backend
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
 
-**Current Setup**: Public access (anyone can edit)
-
-**For Production**: Consider adding:
-- Authentication (login system)
-- Admin panel
-- Input validation
-- Rate limiting
-
-## 🎯 Benefits After Deployment
-
-✅ **Multi-user**: Multiple people can manage companies  
-✅ **Real-time**: Changes appear immediately for all users  
-✅ **Persistent**: Data survives server restarts  
-✅ **Professional**: Proper API backend  
-✅ **Scalable**: Can handle many companies and users  
-
-## 📱 Mobile Ready
-The app is fully responsive and works perfectly on:
-- Desktop computers
-- Tablets
-- Mobile phones
-
-Your company cards will look great and be easily manageable from any device!
-
-## 🛠️ Need Help?
-If you encounter any issues during deployment, I can help you troubleshoot or set up alternative deployment methods.
+# Frontend
+cd ..
+python -m http.server 3000
+```
+Visit `http://localhost:3000` and the app will call `http://localhost:8000/api`.
